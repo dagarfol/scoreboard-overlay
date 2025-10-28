@@ -1,0 +1,137 @@
+/* src/VerticalTableScoreboard.css */
+.table-container {
+  margin: 10px auto;
+  width: fit-content;
+  font-family: Arial, sans-serif;
+  color: #ecf0f1;
+}
+
+.scoreboard-table {
+  border-collapse: collapse;
+  background-color: #2c3e50;
+  border-radius: 6px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.scoreboard-table td {
+  padding: 4px 8px;
+  text-align: center;
+  border-right: 1px solid #34495e;
+  vertical-align: middle;
+  font-size: 0.8rem;
+}
+
+.team-logo {
+  width: 30px; /* Smaller logo */
+  height: 30px; /* Smaller logo */
+  border-radius: 50%;
+  border: 1px solid #3498db; /* Thinner border */
+}
+
+.team-name {
+  font-size: 1rem; /* Smaller font for team names */
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Team Cell with indicator */
+.team-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 100px;
+  padding: 4px 8px;
+}
+
+.team-cell-content {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.team-cell-indicators {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* === MODIFIED STYLES START === */
+
+/* Serving indicator styling */
+.serving-indicator {
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent; /* Half the height of the triangle */
+  border-bottom: 7px solid transparent; /* Half the height of the triangle */
+  border-right: 15px solid #2ecc71; /* Color and size of the triangle */
+  /* margin-right: 5px; */
+  margin-left: 3px;
+}
+.serving-indicator.not-serving {
+    border-right: 15px solid transparent;
+}
+
+/* To ensure correct alignment with the indicators */
+.team-cell:last-child .serving-indicator {
+  border-right: none;
+  border-left: 5px solid #2ecc71;
+}
+
+/* Timeout indicators container */
+.timeouts-container {
+  display: flex;
+  gap: 3px;
+  margin-left: 5px;
+}
+
+/* Timeout indicator styling */
+.timeout-indicator {
+  width: 6px;
+  height: 6px;
+  background-color: #5d6d7e; /* Inactive/available timeout color */
+  border-radius: 50%;
+  border: 1px solid #bdc3c7;
+}
+
+.timeout-indicator.used {
+  background-color: #bdc3c7; /* A solid, filled color for used timeouts */
+}
+
+/* === MODIFIED STYLES END === */
+
+/* Other cells */
+.sets-won-cell {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  background-color: #f1c40f;
+}
+
+.set-points-cell {
+  color: #bdc3c7;
+  font-size: 0.8rem;
+}
+
+.current-score-cell {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #ecf0f1;
+  background-color: #3498db;
+  border-right: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.2);
+  }
+
+}
+/* To ensure correct vertical alignment */
+.scoreboard-table td {
+  vertical-align: middle;
+}

@@ -1,24 +1,48 @@
-import logo from './logo.svg';
+// src/App.js
+import React from 'react';
+import Scoreboard from './Scoreboard';
+import VerticalTableScoreboard from './VerticalTableScoreboard';
 import './App.css';
 
+// Placeholder images for demonstration
+// import teamALogo from 'https://www.todovoleibol.com/images/escudos/cv-alcala.jpg'; 
+// import teamBLogo from 'https://www.todovoleibol.com/images/escudos/cde-manzanares-voley.jpg';
+
 function App() {
+  const matchData = {
+    teamA: {
+      logo: 'https://www.todovoleibol.com/images/escudos/cv-alcala.jpg',
+      name: 'CV Alcalá Glauka Viajes A',
+      score: 21,
+      sets: 2,
+      setPoints: [
+        { set: 1, points: 25 },
+        { set: 2, points: 20 },
+        { set: 3, points: 21 },
+      ],
+      isServing: true, // Team A is currently serving
+      timeoutsUsed: 1, // Team A has used 1 timeout
+    },
+    teamB: {
+      logo: 'https://www.todovoleibol.com/images/escudos/cde-manzanares-voley.jpg',
+      name: 'CDE MANZANARES VOLEY A',
+      score: 18,
+      sets: 1,
+      setPoints: [
+        { set: 1, points: 23 },
+        { set: 2, points: 25 },
+        { set: 3, points: 18 },
+      ],
+      isServing: true, // Team B is not serving
+      timeoutsUsed: 2, // Team B has used 2 timeouts
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div>
+      <Scoreboard matchData={matchData} />
+      <VerticalTableScoreboard matchData={matchData} />
+      </div>
   );
 }
 
