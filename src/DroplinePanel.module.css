@@ -1,0 +1,58 @@
+/* src/DroplinePanel.module.css */
+
+.dropline-panel {
+  position: absolute;
+  top: 100%; /* Position below the parent */
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
+  margin-top: 5px; /* Spacing from the scoreboard */
+  padding: 4px 8px;
+  background-color: #34495e; /* Slightly darker than scoreboard */
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ecf0f1;
+  font-family: Arial, sans-serif;
+  z-index: 10; /* Ensure it stays on top of other content */
+  width: fit-content;
+  white-space: nowrap; /* Prevent text from wrapping prematurely */
+}
+
+.dropline-panel::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #34495e; /* Arrow pointing up */
+}
+
+.dropline-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ecf0f1;
+  padding: 3px;
+  border: 1px solid #61dafb;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-line-1 {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.text-line-2 {
+  font-size: 0.8rem;
+  color: #bdc3c7;
+}

@@ -1,5 +1,12 @@
 /* src/Scoreboard.module.css */
 
+/* Add a wrapper for the scoreboard and dropline */
+.scoreboard-wrapper {
+  position: relative; /* This is crucial for positioning the panel */
+  width: fit-content;
+  margin: 20px auto;
+}
+
 .scoreboard-container {
   display: flex;
   align-items: center;

@@ -1,51 +1,106 @@
 // src/Scoreboard.js
-import React from 'react';
-import styles from './Scoreboard.module.css';
+import React, { useState, useEffect  } from "react";
+import styles from "./Scoreboard.module.css";
+import DroplinePanel from "./DroplinePanel"; // New import
 
 const Scoreboard = ({ matchData }) => {
   const { teamA, teamB } = matchData;
+  const [panelData, setPanelData] = useState(null); // State to control the panel
+
+  // Dummy function to demonstrate how to trigger the panel
+  const handleAction = () => {
+    setPanelData({
+      icon: "/ref_flag.png", // Replace with your icon path
+      textLine1: "Referee Decision",
+      textLine2: "Player Substitution",
+    });
+    // setTimeout(() => setPanelData(null), 5000); // Hide after 5 seconds
+  };
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleAction();
+    }, 2000); // Trigger after 2 seconds
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []); // Empty dependency array means this runs once on mount
 
   const renderTimeouts = (team) => {
     return [...Array(2)].map((_, index) => (
       <div
         key={index}
-        className={`${styles['timeout-indicator']} ${index < team.timeoutsUsed ? styles.used : ''}`}
+        className={`${styles["timeout-indicator"]} ${
+          index < team.timeoutsUsed ? styles.used : ""
+        }`}
       ></div>
     ));
   };
 
   return (
-    <div className={styles['scoreboard-container']}>
-      {/* Team A */}
-      <div className={styles['team-info']}>
-        <img src={teamA.logo} alt={teamA.name} className={styles['team-logo']} />
-        <div className={styles['name-details']}>
-          <div className={styles['name-and-indicator']}>
-            <span className={styles['team-name']}>{teamA.name}</span>            
+    <div className={styles["scoreboard-wrapper"]}>
+      {/* New wrapper div */}
+      <div className={styles["scoreboard-container"]}>
+        {/* Team A */}
+        <div className={styles["team-info"]}>
+          <img
+            src={teamA.logo}
+            alt={teamA.name}
+            className={styles["team-logo"]}
+          />
+          <div className={styles["name-details"]}>
+            <div className={styles["name-and-indicator"]}>
+              <span className={styles["team-name"]}>{teamA.name}</span>
+            </div>
+            <div className={styles["timeouts-container"]}>
+              {renderTimeouts(teamA)}
+            </div>
           </div>
-          <div className={styles['timeouts-container']}>{renderTimeouts(teamA)}</div>
+          {teamA.isServing && (
+            <div
+              className={`${styles["serving-indicator"]} ${styles.left}`}
+            ></div>
+          )}
         </div>
-        {teamA.isServing && <div className={`${styles['serving-indicator']} ${styles.left}`}></div>}
-      </div>
 
-      {/* Scores and Sets */}
-      <div className={styles['match-details']}>
-        <span className={styles['team-score']}>{teamA.score}</span>
-        <span className={styles['sets-score']}>{teamA.sets}-{teamB.sets}</span>
-        <span className={styles['team-score']}>{teamB.score}</span>
-      </div>
+        {/* Scores and Sets */}
+        <div className={styles["match-details"]}>
+          <span className={styles["team-score"]}>{teamA.score}</span>
+          <span className={styles["sets-score"]}>
+            {teamA.sets}-{teamB.sets}
+          </span>
+          <span className={styles["team-score"]}>{teamB.score}</span>
+        </div>
 
-      {/* Team B */}
-      <div className={styles['team-info']}>
-            {teamB.isServing && <div className={`${styles['serving-indicator']} ${styles.right}`}></div>}
-        <div className={styles['name-details']}>
-          <div className={styles['name-and-indicator']}>
-            <span className={styles['team-name']}>{teamB.name}</span>
+        {/* Team B */}
+        <div className={styles["team-info"]}>
+          {teamB.isServing && (
+            <div
+              className={`${styles["serving-indicator"]} ${styles.right}`}
+            ></div>
+          )}
+          <div className={styles["name-details"]}>
+            <div className={styles["name-and-indicator"]}>
+              <span className={styles["team-name"]}>{teamB.name}</span>
+            </div>
+            <div className={styles["timeouts-container"]}>
+              {renderTimeouts(teamB)}
+            </div>
           </div>
-          <div className={styles['timeouts-container']}>{renderTimeouts(teamB)}</div>
+          <img
+            src={teamB.logo}
+            alt={teamB.name}
+            className={styles["team-logo"]}
+          />
         </div>
-        <img src={teamB.logo} alt={teamB.name} className={styles['team-logo']} />
       </div>
+      {/* Dropline Panel */}
+      {panelData && (
+        <DroplinePanel
+          icon={panelData.icon}
+          textLine1={panelData.textLine1}
+          textLine2={panelData.textLine2}
+        />
+      )}
     </div>
   );
 };
