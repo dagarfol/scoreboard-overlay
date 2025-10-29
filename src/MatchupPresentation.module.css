@@ -1,5 +1,16 @@
 /* src/MatchupPresentation.module.css */
 
+.matchup-wrapper {
+  z-index: 100;
+}
+
+.matchup-wrapper.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .matchup-card {
   display: flex;
   flex-direction: column;
