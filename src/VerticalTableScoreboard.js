@@ -2,8 +2,10 @@
 import React from 'react';
 import styles from './VerticalTableScoreboard.module.css'; // Note: The previous example used the table module, so we'll stick with that naming.
 
-const VerticalTableScoreboard = ({ matchData }) => {
+const VerticalTableScoreboard = ({ matchData, scoreboardConfig  }) => {
   const { teamA, teamB } = matchData;
+  const positionClass = scoreboardConfig.position ? styles[scoreboardConfig.position] : '';
+
 
   const renderTeamRow = (team) => {
     const timeoutIndicators = [...Array(2)].map((_, index) => (
@@ -37,13 +39,13 @@ const VerticalTableScoreboard = ({ matchData }) => {
   };
 
   return (
-    <div className={styles['table-container']}>
-      <table className={styles['scoreboard-table']}>
-        <tbody>
-          {renderTeamRow(teamA)}
-          {renderTeamRow(teamB)}
-        </tbody>
-      </table>
+    <div className={`${styles['scoreboard-wrapper']} ${positionClass} ${styles['table-container']}`}>
+        <table className={styles['scoreboard-table']}>
+          <tbody>
+            {renderTeamRow(teamA)}
+            {renderTeamRow(teamB)}
+          </tbody>
+        </table>
     </div>
   );
 };

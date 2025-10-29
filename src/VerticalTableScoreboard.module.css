@@ -1,4 +1,48 @@
 /* src/VerticalTableScoreboard.css */
+/* Wrapper for the scoreboard table */
+.scoreboard-wrapper {
+  position: fixed;
+  z-index: 100;
+}
+
+/* Position for the top-left corner */
+.top-left {
+  top: 20px;
+  left: 20px;
+}
+
+/* Position for the top-center */
+.top {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Position for the top-right corner */
+.top-right {
+  top: 20px;
+  right: 20px;
+}
+
+/* Position for the bottom-left corner */
+.bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Position for the bottom-center */
+.bottom {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Position for the bottom-right corner */
+.bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
 .table-container {
   margin: 10px auto;
   width: fit-content;

@@ -45,6 +45,9 @@ function App() {
     const scoreboardConfig = {
     position: 'bottom-right' // 'top-left', 'top', 'top-right', 'bottom-left', 'bottom', 'bottom-right'
   };
+    const verticalConfig = {
+    position: 'top-left' // Example position for the vertical scoreboard
+  };
   // const [panelData, setPanelData] = useState(null);
 
   // const handleAction = (icon, textLine1, textLine2) => {
@@ -59,7 +62,7 @@ function App() {
         scoreboardConfig={scoreboardConfig} // Pass the config as a prop
         // onShowDropline={handleAction} 
         />
-      <VerticalTableScoreboard matchData={matchData} />
+      <VerticalTableScoreboard matchData={matchData} scoreboardConfig={verticalConfig} />
       <MatchupPresentation matchData={matchData} />
       </div>
   );
