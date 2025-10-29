@@ -1,10 +1,53 @@
 /* src/Scoreboard.module.css */
 
 /* Add a wrapper for the scoreboard and dropline */
-.scoreboard-wrapper {
-  position: relative; /* This is crucial for positioning the panel */
+/* .scoreboard-wrapper {
+  position: relative;
   width: fit-content;
   margin: 20px auto;
+} */
+/* Add general positioning to the wrapper */
+.scoreboard-wrapper {
+  position: fixed; /* Use fixed positioning relative to the viewport */
+  z-index: 100; /* Ensure it's on top of other content */
+}
+
+/* Position for the top-left corner */
+.top-left {
+  top: 20px;
+  left: 20px;
+}
+
+/* Position for the top-center */
+.top {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Position for the top-right corner */
+.top-right {
+  top: 20px;
+  right: 20px;
+}
+
+/* Position for the bottom-left corner */
+.bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Position for the bottom-center */
+.bottom {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Position for the bottom-right corner */
+.bottom-right {
+  bottom: 20px;
+  right: 20px;
 }
 
 .scoreboard-container {

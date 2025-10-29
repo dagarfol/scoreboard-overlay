@@ -42,10 +42,23 @@ function App() {
     category: 'Liga Regular - Jornada 15',
     location: 'Pabellón Demetrio Lozano, Alcalá de Henares',
   };
+    const scoreboardConfig = {
+    position: 'bottom-right' // 'top-left', 'top', 'top-right', 'bottom-left', 'bottom', 'bottom-right'
+  };
+  // const [panelData, setPanelData] = useState(null);
 
+  // const handleAction = (icon, textLine1, textLine2) => {
+  //   setPanelData({ icon, textLine1, textLine2 });
+  //   setTimeout(() => setPanelData(null), 5000);
+  // };
+  
   return (
     <div>
-      <Scoreboard matchData={matchData} />
+      <Scoreboard 
+        matchData={matchData}
+        scoreboardConfig={scoreboardConfig} // Pass the config as a prop
+        // onShowDropline={handleAction} 
+        />
       <VerticalTableScoreboard matchData={matchData} />
       <MatchupPresentation matchData={matchData} />
       </div>

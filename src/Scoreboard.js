@@ -3,9 +3,13 @@ import React, { useState, useEffect  } from "react";
 import styles from "./Scoreboard.module.css";
 import DroplinePanel from "./DroplinePanel"; // New import
 
-const Scoreboard = ({ matchData }) => {
+const Scoreboard = ({ matchData, scoreboardConfig  }) => {
   const { teamA, teamB } = matchData;
   const [panelData, setPanelData] = useState(null); // State to control the panel
+
+    // You can derive the class name from the prop
+  const positionClass = scoreboardConfig.position ? styles[scoreboardConfig.position] : '';
+
 
   // Dummy function to demonstrate how to trigger the panel
   const handleAction = () => {
@@ -37,7 +41,7 @@ const Scoreboard = ({ matchData }) => {
   };
 
   return (
-    <div className={styles["scoreboard-wrapper"]}>
+    <div className={`${styles['scoreboard-wrapper']} ${positionClass}`}>
       {/* New wrapper div */}
       <div className={styles["scoreboard-container"]}>
         {/* Team A */}
