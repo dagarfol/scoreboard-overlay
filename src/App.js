@@ -4,6 +4,7 @@ import Scoreboard from './Scoreboard';
 import VerticalTableScoreboard from './VerticalTableScoreboard';
 import MatchupPresentation from './MatchupPresentation';
 import LowerThirdMatchup from './LowerThirdMatchup';
+import TeamComparisonTable from './TeamComparisonTable';
 import './App.css';
 
 // Placeholder images for demonstration
@@ -24,6 +25,18 @@ function App() {
       ],
       isServing: true, // Team A is currently serving
       timeoutsUsed: 1, // Team A has used 1 timeout
+      stats: {
+        ranking: 2,
+        matchesPlayed: 15,
+        totalMatchesWon: 12,
+        won3Points: 8,
+        won2Points: 4,
+        totalMatchesLost: 3,
+        lost1Point: 2,
+        lost0Points: 1,
+        totalPointsScored: 345,
+        totalPointsReceived: 298,
+      },
     },
     teamB: {
       logo: 'https://www.todovoleibol.com/images/escudos/cde-vb-villanueva-del-pardillo.jpg',
@@ -37,6 +50,18 @@ function App() {
       ],
       isServing: true, // Team B is not serving
       timeoutsUsed: 2, // Team B has used 2 timeouts
+      stats: {
+        ranking: 5,
+        matchesPlayed: 15,
+        totalMatchesWon: 10,
+        won3Points: 7,
+        won2Points: 3,
+        totalMatchesLost: 5,
+        lost1Point: 3,
+        lost0Points: 2,
+        totalPointsScored: 320,
+        totalPointsReceived: 310,
+      },
     },
     competition: '1ª División Autonómica Preferente',
     competitionLogo: 'https://fmvoley.com/images/logo.svg', // Add this line
@@ -66,6 +91,7 @@ function App() {
       <VerticalTableScoreboard matchData={matchData} scoreboardConfig={verticalConfig} />
       <MatchupPresentation matchData={matchData} />
       <LowerThirdMatchup matchData={matchData} />
+      <TeamComparisonTable matchData={matchData} />
       </div>
   );
 }

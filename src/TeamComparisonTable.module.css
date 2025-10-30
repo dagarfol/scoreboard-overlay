@@ -1,0 +1,75 @@
+/* src/TeamComparisonTable.module.css */
+
+.comparison-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.comparison-table {
+  border-collapse: collapse;
+  background-color: #34495e;
+  color: #ecf0f1;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: fit-content;
+}
+
+.header-cell {
+  padding: 10px 15px;
+  text-align: center;
+  border-right: 1px solid #34495e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.empty-cell {
+  width: 120px; /* Adjust width as needed for the stat label column */
+  background-color: #34495e;
+}
+
+.team-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #3498db;
+}
+
+.team-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #f1c40f;
+}
+
+.stat-value {
+  padding: 8px 15px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.stat-label {
+  padding: 8px 15px;
+  background-color: #34495e;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #bdc3c7;
+  text-transform: uppercase;
+}
+
+.comparison-table tbody tr:nth-child(odd) .stat-value {
+  background-color: #5d6d7e;
+}
+
+.comparison-table tbody tr:nth-child(even) .stat-value {
+  background-color: #3b4d61;
+}
