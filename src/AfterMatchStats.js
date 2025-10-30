@@ -40,12 +40,12 @@ const AfterMatchStats = ({ matchData }) => {
                         <th className={styles["empty-cell"]}>
                             <div>
                                 <span>FINAL</span>
-                                <div class={styles["final-score"]}>
-                                    <span class={`${winner === "teamA" ? styles["winner"] : ""}`} >
+                                <div className={styles["final-score"]}>
+                                    <span className={`${winner === "teamA" ? styles["winner"] : ""}`} >
                                         {teamA.sets}
                                     </span>
                                     <span > - </span>
-                                    <span class={`${winner === "teamB" ? styles["winner"] : ""}`}>{teamB.sets}</span>
+                                    <span className={`${winner === "teamB" ? styles["winner"] : ""}`}>{teamB.sets}</span>
                                 </div>
                             </div>
                         </th>
