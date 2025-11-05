@@ -3,28 +3,29 @@ import React from 'react';
 import styles from './MatchupPresentation.module.css';
 import useComponentVisibility from './hooks/useComponentVisibility';
 
-const MatchupPresentation = ({ matchData, enabled }) => {
+const MatchupPresentation = ({ matchDetails, enabled }) => {
   const { isVisible, animationClass } = useComponentVisibility(enabled, 500);
   if (!isVisible) return null;
 
-  const { teamA, teamB, competition, competitionLogo, category, location } = matchData;
+  // const { teamA, teamB, competition, competitionLogo, category, location } = matchDetails;
+  const { matchHeader, competitionLogo, extendedInfo, stadium } = matchDetails;
 
   return (
     <div className={`${styles['matchup-wrapper']} ${styles[animationClass]}`}>
       <div className={styles['matchup-card']}>
         <div className={styles['details-container']}>
           <div className={styles['competition-info']}>
-            <span className={styles['competition']}>{competition}</span>
+            <span className={styles['competition']}>{matchHeader}</span>
           </div>
-          <span className={styles['category']}>{category}</span>
-          <span className={styles['location']}>{location}</span>
+          <span className={styles['category']}>{extendedInfo}</span>
+          <span className={styles['location']}>{stadium}</span>
         </div>
         <div className={styles['teams-container']}>
           <div className={styles['team']}>
             <div className={styles['logo-container']}>
-              <img src={teamA.logo} alt={teamA.name} className={styles['team-logo']} />
+              <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles['team-logo']} />
             </div>
-            <span className={styles['team-name']}>{teamA.name}</span>
+            <span className={styles['team-name']}>{matchDetails.teams.teamA}</span>
           </div>
           <div className={styles['vs-container']}>
             <span className={styles['vs']}>vs</span>
@@ -32,9 +33,9 @@ const MatchupPresentation = ({ matchData, enabled }) => {
           </div>
           <div className={styles['team']}>
             <div className={styles['logo-container']}>
-              <img src={teamB.logo} alt={teamB.name} className={styles['team-logo']} />
+              <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles['team-logo']} />
             </div>
-            <span className={styles['team-name']}>{teamB.name}</span>
+            <span className={styles['team-name']}>{matchDetails.teams.teamB}</span>
           </div>
         </div>
       </div>

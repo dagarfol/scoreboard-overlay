@@ -5,8 +5,9 @@ import useDropline from './hooks/useDropline';
 import DroplinePanel from "./DroplinePanel";
 import useComponentVisibility from './hooks/useComponentVisibility'; 
 
-const Scoreboard = ({ matchData, scoreboardConfig  }) => {
-  const { teamA, teamB } = matchData;
+const Scoreboard = ({ matchDetails, matchData, scoreboardConfig  }) => {
+  const { timeouts, scores,setsWon, currentServer } = matchData;
+
   const { panelData, shouldAnimate } = useDropline(matchData.matchEvent);
   const { isVisible, animationClass } = useComponentVisibility(scoreboardConfig.enabled && (scoreboardConfig.type=== 'classic'), 500);
   if (!isVisible) return null;
@@ -14,12 +15,12 @@ const Scoreboard = ({ matchData, scoreboardConfig  }) => {
   const positionClass = scoreboardConfig.position ? styles[scoreboardConfig.position] : '';
   const isBottomPosition = scoreboardConfig.position && scoreboardConfig.position.startsWith('bottom');
 
-  const renderTimeouts = (team) => {
+  const renderTimeouts = (timeoutsUsed) => {
     return [...Array(2)].map((_, index) => (
       <div
         key={index}
         className={`${styles["timeout-indicator"]} ${
-          index < team.timeoutsUsed ? styles.used : ""
+          index < timeoutsUsed ? styles.used : ""
         }`}
       ></div>
     ));
@@ -30,19 +31,19 @@ const Scoreboard = ({ matchData, scoreboardConfig  }) => {
       <div className={styles["scoreboard-container"]}>
         <div className={styles["team-info"]}>
           <img
-            src={teamA.logo}
-            alt={teamA.name}
+            src={matchDetails.teamLogos.teamA}
+            alt={matchDetails.teams.teamA}
             className={styles["team-logo"]}
           />
           <div className={styles["name-details"]}>
             <div className={styles["name-and-indicator"]}>
-              <span className={styles["team-name"]}>{teamA.name}</span>
+              <span className={styles["team-name"]}>{matchDetails.teams.teamA}</span>
             </div>
             <div className={styles["timeouts-container"]}>
-              {renderTimeouts(teamA)}
+              {renderTimeouts(timeouts.teamA)}
             </div>
           </div>
-          {teamA.isServing && (
+          {currentServer === 'teamA' && (
             <div
               className={`${styles["serving-indicator"]} ${styles.left}`}
             ></div>
@@ -51,31 +52,31 @@ const Scoreboard = ({ matchData, scoreboardConfig  }) => {
 
         {/* Scores and Sets */}
         <div className={styles["match-details"]}>
-          <span className={styles["team-score"]}>{teamA.score}</span>
+          <span className={styles["team-score"]}>{scores.teamA}</span>
           <span className={styles["sets-score"]}>
-            {teamA.sets}-{teamB.sets}
+            {setsWon.teamA}-{setsWon.teamB}
           </span>
-          <span className={styles["team-score"]}>{teamB.score}</span>
+          <span className={styles["team-score"]}>{scores.teamB}</span>
         </div>
 
         {/* Team B */}
         <div className={styles["team-info"]}>
-          {teamB.isServing && (
+          {currentServer === 'teamB' && (
             <div
               className={`${styles["serving-indicator"]} ${styles.right}`}
             ></div>
           )}
           <div className={styles["name-details"]}>
             <div className={styles["name-and-indicator"]}>
-              <span className={styles["team-name"]}>{teamB.name}</span>
+              <span className={styles["team-name"]}>{matchDetails.teams.teamB}</span>
             </div>
             <div className={styles["timeouts-container"]}>
-              {renderTimeouts(teamB)}
+              {renderTimeouts(timeouts.teamB)}
             </div>
           </div>
           <img
-            src={teamB.logo}
-            alt={teamB.name}
+            src={matchDetails.teamLogos.teamB}
+            alt={matchDetails.teams.teamB}
             className={styles["team-logo"]}
           />
         </div>

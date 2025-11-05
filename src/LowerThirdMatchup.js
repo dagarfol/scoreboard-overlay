@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import styles from './LowerThirdMatchup.module.css';
 import useComponentVisibility from './hooks/useComponentVisibility';
 
-const LowerThirdMatchup = ({ matchData, enabled }) => {
+const LowerThirdMatchup = ({ matchDetails, enabled }) => {
   const { isVisible, animationClass } = useComponentVisibility(enabled, 500);
   
-  const { teamA, teamB, competition, competitionLogo, category, location } = matchData;
+  const { matchHeader, competitionLogo, extendedInfo, stadium } = matchDetails;
 
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const cyclingTexts = [`${competition} - ${category}`, location];
+  const cyclingTexts = [`${matchHeader} - ${extendedInfo}`, stadium];
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,14 +24,14 @@ const LowerThirdMatchup = ({ matchData, enabled }) => {
     <div className={`${styles['lower-third-wrapper']} ${styles[animationClass]}`}>
       <div className={styles['lower-third-container']}>
         <div className={styles['team-logo-left']}>
-          <img src={teamA.logo} alt={teamA.name} className={styles['team-logo']} />
+          <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles['team-logo']} />
         </div>
 
         <div className={styles['text-content']}>
           <div className={styles['teams-vs']}>
-            <span className={styles['team-name']}>{teamA.name}</span>
+            <span className={styles['team-name']}>{matchDetails.teams.teamA}</span>
             <span className={styles['vs']}>vs</span>
-            <span className={styles['team-name']}>{teamB.name}</span>
+            <span className={styles['team-name']}>{matchDetails.teams.teamB}</span>
           </div>
 
           <div className={styles['animated-text-container']}>
@@ -51,7 +51,7 @@ const LowerThirdMatchup = ({ matchData, enabled }) => {
         </div>
 
         <div className={styles['team-logo-right']}>
-          <img src={teamB.logo} alt={teamB.name} className={styles['team-logo']} />
+          <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles['team-logo']} />
         </div>
       </div>
     </div>

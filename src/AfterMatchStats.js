@@ -3,20 +3,20 @@ import React from "react";
 import styles from "./AfterMatchStats.module.css";
 import useComponentVisibility from './hooks/useComponentVisibility';
 
-const AfterMatchStats = ({ matchData, afterMatchConfig }) => {
+const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
     
   const { isVisible, animationClass } = useComponentVisibility(afterMatchConfig.enabled, 500);
   if (!isVisible) return null;
-    const { teamA, teamB, competition, competitionLogo, category, winner } =
-        matchData;
+    const { statistics, winner, setsWon, } = matchData;
+    const { matchHeader, competitionLogo, extendedInfo, stadium } = matchDetails;
 
     const stats = [
-        { label: "SERVING ACES", key: "servingAces" },
-        { label: "SERVING FAULTS", key: "servingFaults" },
-        { label: "ATTACKS", key: "attacks" },
-        { label: "ATTACK KILLS", key: "attackKills" },
-        { label: "BLOCKS", key: "blocks" },
-        { label: "DIGS", key: "digs" },
+        { label: "SERVING ACES", key: "ace" },
+        { label: "SERVING FAULTS", key: "serveError" },
+        { label: "ATTACKS", key: "attack" },
+        { label: "ATTACK KILLS", key: "attackPoint" },
+        { label: "BLOCKS", key: "blockPoint" },
+        { label: "DIGS", key: "dig" },
     ];
 
     return (
@@ -28,8 +28,8 @@ const AfterMatchStats = ({ matchData, afterMatchConfig }) => {
                     )}
                 </div>
                 <div>
-                    <div className={styles["competition"]}>{competition}</div>
-                    <div className={styles["category"]}>{category}</div>
+                    <div className={styles["competition"]}>{matchHeader}</div>
+                    <div className={styles["category"]}>{extendedInfo}</div>
                 </div>
             </div>
             <table className={styles["after-match-table"]}>
@@ -37,36 +37,36 @@ const AfterMatchStats = ({ matchData, afterMatchConfig }) => {
                     <tr>
                         <th className={`${styles["header-cell"]} ${winner === "teamA" ? styles["winner"] : ""}`}>
                             <div className={styles['logo-container']}>
-                                <img src={teamA.logo} alt={teamA.name} className={styles["team-logo"]} />
+                                <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles["team-logo"]} />
                             </div>
-                            <div className={styles["team-name"]}>{teamA.name}</div>
+                            <div className={styles["team-name"]}>{matchDetails.teams.teamA}</div>
                         </th>
                         <th className={styles["empty-cell"]}>
                             <div>
                                 <span>FINAL</span>
                                 <div className={styles["final-score"]}>
                                     <span className={`${winner === "teamA" ? styles["winner"] : ""}`} >
-                                        {teamA.sets}
+                                        {setsWon.teamA}
                                     </span>
                                     <span > - </span>
-                                    <span className={`${winner === "teamB" ? styles["winner"] : ""}`}>{teamB.sets}</span>
+                                    <span className={`${winner === "teamB" ? styles["winner"] : ""}`}>{setsWon.teamB}</span>
                                 </div>
                             </div>
                         </th>
                         <th className={`${styles["header-cell"]} ${winner === "teamB" ? styles["winner"] : ""}`}>
                             <div className={styles['logo-container']}>
-                                <img src={teamB.logo} alt={teamB.name} className={styles["team-logo"]} />
+                                <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles["team-logo"]} />
                             </div>
-                            <div className={styles["team-name"]}>{teamB.name}</div>
+                            <div className={styles["team-name"]}>{matchDetails.teams.teamA}</div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     {afterMatchConfig.showStats && stats.map((stat, index) => (
                         <tr key={index}>
-                            <td className={styles["stat-value"]}>{teamA.stats[stat.key]}</td>
+                            <td className={styles["stat-value"]}>{statistics.teamA[stat.key]}</td>
                             <td className={styles["stat-label"]}>{stat.label}</td>
-                            <td className={styles["stat-value"]}>{teamB.stats[stat.key]}</td>
+                            <td className={styles["stat-value"]}>{statistics.teamB[stat.key]}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -140,6 +140,7 @@
   font-size: 1.5rem; /* Smaller team names */
   font-weight: bold;
   text-transform: uppercase;
+  color: #f1c40f;
 }
 
 .vs-container {

@@ -3,11 +3,9 @@ import React from 'react';
 import styles from './TeamComparisonTable.module.css';
 import useComponentVisibility from './hooks/useComponentVisibility';
 
-const TeamComparisonTable = ({ matchData, enabled }) => {
+const TeamComparisonTable = ({ matchDetails, enabled }) => {
   const { isVisible, animationClass } = useComponentVisibility(enabled, 500);
   if (!isVisible) return null;
-
-  const { teamA, teamB } = matchData;
 
   const stats = [
     { label: 'Ranking', key: 'ranking' },
@@ -28,22 +26,26 @@ const TeamComparisonTable = ({ matchData, enabled }) => {
         <thead>
           <tr>
             <th className={styles['header-cell']}>
-              <img src={teamA.logo} alt={teamA.name} className={styles['team-logo']} />
-              <div className={styles['team-name']}>{teamA.name}</div>
+              <div>
+                <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles['team-logo']} />
+                <div className={styles['team-name']}>{matchDetails.teams.teamA}</div>
+              </div>
             </th>
             <th className={styles['empty-cell']}></th>
             <th className={styles['header-cell']}>
-              <img src={teamB.logo} alt={teamB.name} className={styles['team-logo']} />
-              <div className={styles['team-name']}>{teamB.name}</div>
+              <div>
+                <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles['team-logo']} />
+                <div className={styles['team-name']}>{matchDetails.teams.teamB}</div>
+              </div>
             </th>
           </tr>
         </thead>
         <tbody>
           {stats.map((stat, index) => (
             <tr key={index}>
-              <td className={styles['stat-value']}>{teamA.stats[stat.key]}</td>
+              <td className={styles['stat-value']}>{matchDetails.stats.teamA[stat.key]}</td>
               <td className={styles['stat-label']}>{stat.label}</td>
-              <td className={styles['stat-value']}>{teamB.stats[stat.key]}</td>
+              <td className={styles['stat-value']}>{matchDetails.stats.teamB[stat.key]}</td>
             </tr>
           ))}
         </tbody>
