@@ -4,19 +4,21 @@ import styles from "./AfterMatchStats.module.css";
 import useComponentVisibility from './hooks/useComponentVisibility';
 
 const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
-    
-  const { isVisible, animationClass } = useComponentVisibility(afterMatchConfig.enabled, 500);
-  if (!isVisible) return null;
+
+    const { isVisible, animationClass } = useComponentVisibility(afterMatchConfig.enabled, 500);
+    if (!isVisible) return null;
     const { statistics, winner, setsWon, } = matchData;
     const { matchHeader, competitionLogo, extendedInfo } = matchDetails;
 
     const stats = [
-        { label: "SERVING ACES", key: "ace" },
-        { label: "SERVING FAULTS", key: "serveError" },
-        { label: "ATTACKS", key: "attack" },
-        { label: "ATTACK KILLS", key: "attackPoint" },
-        { label: "BLOCKS", key: "blockPoint" },
-        { label: "DIGS", key: "dig" },
+        { label: "PUNTOS Directos DE SAQUE", key: "ace" },
+        { label: "% Recepciones buenas", key: "receptionEffectiveness" },
+        { label: "PUNTOS DE ATAQUE", key: "attackPoint" },
+        { label: "PUNTOS DE BLOQUEO", key: "blockPoint" },
+        { label: "Errores cometidos", key: "selfErrors" },
+        { label: "Efectividad del servicio", key: "serviceEffectiveness" },
+        { label: "Efectividad del ataque", key: "attackEffectiveness" },
+        { label: "Efectividad de la defensa", key: "defenseEffectiveness" },
     ];
 
     return (
@@ -43,7 +45,7 @@ const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
                         </th>
                         <th className={styles["empty-cell"]}>
                             <div>
-                                <span>{winner? "FINAL" : "EN JUEGO"}</span>
+                                <span>{winner ? "FINAL" : "EN JUEGO"}</span>
                                 <div className={styles["final-score"]}>
                                     <span className={`${winner === "teamA" ? styles["winner"] : ""}`} >
                                         {setsWon.teamA}
