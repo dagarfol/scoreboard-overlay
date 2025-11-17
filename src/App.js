@@ -11,40 +11,40 @@ import './App.css';
 import UniformIcon from './UniformIcon';
 
 const initialMatchDetails = {
-    teams: { teamA: 'CV Alcala Glauka Viajes', teamB: 'CV el otro con patrocinador' },
+    teams: { teamA: '', teamB: '' },
     teamLogos: {
-      teamA: 'https://www.todovoleibol.com/images/escudos/cv-alcala.jpg',
-      teamB: 'https://www.todovoleibol.com/images/escudos/cv-fuenlabrada.jpg'
+      teamA: '',
+      teamB: ''
     },
-    matchHeader: 'CADETE - 1ª División Aut. Preferente',
-    extendedInfo: 'Liga regular - Jornada 5',
-    stadium: 'Pabellón Demetrio Lozano, Alcalá de Henares',
-    competitionLogo: 'https://fmvoley.com/images/logo.svg',
+    matchHeader: '',
+    extendedInfo: '',
+    stadium: '',
+    competitionLogo: '',
     maxSets: 5,
     stats: {
       teamA: {
-        ranking: 2,
-        matchesPlayed: 15,
-        totalMatchesWon: 12,
-        won3Points: 8,
-        won2Points: 4,
-        totalMatchesLost: 3,
-        lost1Point: 2,
-        lost0Points: 1,
-        totalPointsScored: 345,
-        totalPointsReceived: 298,
+        ranking: 0,
+        matchesPlayed: 0,
+        totalMatchesWon: 0,
+        won3Points: 0,
+        won2Points: 0,
+        totalMatchesLost: 0,
+        lost1Point: 0,
+        lost0Points: 0,
+        totalPointsScored: 0,
+        totalPointsReceived: 0,
       },
       teamB: {
-        ranking: 5,
-        matchesPlayed: 15,
-        totalMatchesWon: 10,
-        won3Points: 7,
-        won2Points: 3,
-        totalMatchesLost: 5,
-        lost1Point: 3,
-        lost0Points: 2,
-        totalPointsScored: 320,
-        totalPointsReceived: 310,
+        ranking: 0,
+        matchesPlayed: 0,
+        totalMatchesWon: 0,
+        won3Points: 0,
+        won2Points: 0,
+        totalMatchesLost: 0,
+        lost1Point: 0,
+        lost0Points: 0,
+        totalPointsScored: 0,
+        totalPointsReceived: 0,
       }
     },
   };
@@ -58,8 +58,8 @@ const initialMatchData = {
   matchStarted: false,
   timeouts: { teamA: 0, teamB: 0 },
   statistics: {
-    teamA: { serve: 0, ace: 0, serveError: 0, reception: 0, receptionError: 0, dig: 0, digError: 0, attack: 0, attackPoint: 0, attackError: 0, block: 0, blockPoint: 0, blockOut: 0, fault: 0 },
-    teamB: { serve: 0, ace: 0, serveError: 0, reception: 0, receptionError: 0, dig: 0, digError: 0, attack: 0, attackPoint: 0, attackError: 0, block: 0, blockPoint: 0, blockOut: 0, fault: 0 },
+    teamA: {},
+    teamB: {},
   },
   winner: '',
   matchEvent: {
@@ -134,6 +134,11 @@ function App() {
       socketInstance.on('updateConfig', (data) => {
         console.log('Message received:', JSON.stringify(data));
         setConfig(data);
+      });
+
+      socketInstance.on('reload', () => {
+        console.log('Reload received!');
+        window.location.reload();
       });
 
       socketInstance.on('disconnect', () => {
