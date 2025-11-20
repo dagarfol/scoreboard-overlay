@@ -45,11 +45,11 @@ const useDropline = (matchEvent) => {
 
   useEffect(() => {
     if (isPanelVisible) {
-      const animateOutTimer = setTimeout(() => setShouldAnimate(false), 7000);
+      const animateOutTimer = setTimeout(() => setShouldAnimate(false), 5000);
       const hidePanelTimer = setTimeout(() => {
         setPanelData(null);
         setIsPanelVisible(false);
-      }, 7200);
+      }, 5200);
 
       // Cleanup timers on component unmount or state change
       return () => {
