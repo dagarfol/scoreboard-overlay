@@ -9,6 +9,7 @@ import AfterMatchStats from './AfterMatchStats';
 import io from 'socket.io-client';
 import './App.css';
 import UniformIcon from './UniformIcon';
+import SponsorsPanel from './SponsorsPanel';
 
 const initialMatchDetails = {
     teams: { teamA: '', teamB: '' },
@@ -87,6 +88,18 @@ const initialConfig = {
   afterMatch: {
     enabled: false,
     showStats: true,
+  },
+  sponsors: {
+    enabled: false,
+    imageUrls: [
+  // 'https://image.singular.live/63c1faa42c4533fdf366cc258ed847c5/images/2IhxI7aYt6kMejyz3Q6Vdf_w1953h551.png',
+  // 'https://image.singular.live/63c1faa42c4533fdf366cc258ed847c5/images/3SElrO9xWs8gXjxfMbcV7i_w2161h445.png',
+  // 'https://image.singular.live/63c1faa42c4533fdf366cc258ed847c5/images/1SBvSFDEg2nR1z0qMXI0kL_w755h242.png',
+  'sponsors-1.png',
+  'sponsors-2.png',
+  'sponsors-3.png',
+  // Añade más URLs según sea necesario
+],displayTime: 4000,
   },
 };
 
@@ -227,6 +240,7 @@ function App() {
         <LowerThirdMatchup matchDetails={matchDetails} enabled={config.lowerThird.enabled} />
         <TeamComparisonTable matchDetails={matchDetails} enabled={config.teamComparison.enabled} />
         <AfterMatchStats matchDetails={matchDetails}  matchData={matchData} afterMatchConfig={config.afterMatch} />
+        <SponsorsPanel sponsorsConfig={config.sponsors} />
 
       {/* Control buttons for demonstration */}
       <div className="controls" style={{display: 'none'}}>
