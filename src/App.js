@@ -12,15 +12,15 @@ import UniformIcon from './UniformIcon';
 import SponsorsPanel from './SponsorsPanel';
 
 const initialMatchDetails = {
-    teams: { teamA: '', teamB: '' },
+    teams: { teamA: null, teamB: null, },
     teamLogos: {
-      teamA: '',
-      teamB: ''
+      teamA: null,
+      teamB: null,
     },
-    matchHeader: '',
-    extendedInfo: '',
-    stadium: '',
-    competitionLogo: '',
+    matchHeader: null,
+    extendedInfo: null,
+    stadium: null,
+    competitionLogo: null,
     maxSets: 5,
     stats: {
       teamA: {
@@ -54,15 +54,15 @@ const initialMatchData = {
   scores: { teamA: 0, teamB: 0 },
   setsWon: { teamA: 0, teamB: 0 },
   setScores: [],//{ teamA: 0, teamB: 0 },],
-  currentServer: '',
-  ballPossession: '',
+  currentServer: null,
+  ballPossession: null,
   matchStarted: false,
   timeouts: { teamA: 0, teamB: 0 },
   statistics: {
     teamA: {},
     teamB: {},
   },
-  winner: '',
+  winner: null,
   matchEvent: {
     timestamp: Date.now(),
     type: null,
@@ -127,7 +127,7 @@ function App() {
       });
 
       socketInstance.on('connect', () => {
-        console.log('Socket.io connection established');
+        console.log(`Socket.io connection established - client id: ${socketInstance.id}`);
       });
 
       socketInstance.on('message', (data) => {
