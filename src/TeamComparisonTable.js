@@ -32,7 +32,7 @@ const TeamComparisonTable = ({ matchDetails, enabled }) => {
                 <div className={styles['team-name']}>{matchDetails.teams.teamA}</div>
               </div>
             </th>
-            <th className={styles['empty-cell']}></th>
+            <th className={styles['empty-cell']}><span className={styles['vs']}>vs</span></th>
             <th className={styles['header-cell']}>
               <div>
                 <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles['team-logo']} />

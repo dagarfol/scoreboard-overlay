@@ -40,19 +40,16 @@
   align-items: stretch;
   justify-content: center;
   gap: 5px;
-  min-width: 300px;
-  min-height: 170px;
-  background: linear-gradient(to bottom, #34495e 40%, rgba(52, 152, 219, 0.5));
 }
 
 .empty-cell {
-  min-width: 150px;
+  min-width: 250px;
   background-color: #34495e;
 }
 
 .team-logo {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   border: 2px solid #3498db;
 }
@@ -62,6 +59,15 @@
   font-weight: bold;
   text-transform: uppercase;
   color: #f1c40f;
+}
+
+.vs {
+  font-size: 5rem;
+  font-weight: bold;
+  background: linear-gradient(to bottom, #3498db 40%, #2ecc71);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .stat-value {
