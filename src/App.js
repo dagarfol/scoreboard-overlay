@@ -81,10 +81,10 @@ const initialConfig = {
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:3005';
 
 function App() {
-  const [matchDetails, setMatchDetails] = useState(initialMatchDetails);
-  const [matchData, setMatchData] = useState(initialMatchData);
+  const [matchDetails, setMatchDetails] = useState(null);
+  const [matchData, setMatchData] = useState(null);
 
-  const [config, setConfig] = useState(initialConfig);
+  const [config, setConfig] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('disconnected'); // 'connecting', 'connected'
 
 
@@ -113,6 +113,9 @@ function App() {
         setTimeout(() => {
           setConnectionStatus('handshake-success-displayed');
         }, 5000);
+        setMatchDetails(data.matchDetails);
+        setMatchData(data.matchData);
+        setConfig(data.config);
       });
 
       socketInstance.on('message', (data) => {
@@ -224,14 +227,17 @@ function App() {
       {connectionStatus === 'handshake-pending' && <div className="connecting-animation">Conectado al servidor de mensajería. Comunicando con la aplicación de control...</div>}
       {connectionStatus === 'handshake-success' && <div className="success-message">Comunicación establecida!</div>}
       
-      <Scoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
-      <VerticalTableScoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
-      <MatchupPresentation matchDetails={matchDetails} enabled={config.matchup.enabled} />
-      <LowerThirdMatchup matchDetails={matchDetails} enabled={config.lowerThird.enabled} />
-      <TeamComparisonTable matchDetails={matchDetails} enabled={config.teamComparison.enabled} />
-      <AfterMatchStats matchDetails={matchDetails} matchData={matchData} afterMatchConfig={config.afterMatch} />
-      <SponsorsPanel sponsorsConfig={config.sponsors} />
-
+      {matchData !=null && (
+        <>
+          <Scoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
+          <VerticalTableScoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
+          <MatchupPresentation matchDetails={matchDetails} enabled={config.matchup.enabled} />
+          <LowerThirdMatchup matchDetails={matchDetails} enabled={config.lowerThird.enabled} />
+          <TeamComparisonTable matchDetails={matchDetails} enabled={config.teamComparison.enabled} />
+          <AfterMatchStats matchDetails={matchDetails} matchData={matchData} afterMatchConfig={config.afterMatch} />
+          <SponsorsPanel sponsorsConfig={config.sponsors} />
+        </>
+      )}
       {/* Control buttons for demonstration */}
       {connectionStatus === 'no-connection' && (
         <div className="controls">
