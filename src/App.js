@@ -12,16 +12,23 @@ import UniformIcon from './UniformIcon';
 import SponsorsPanel from './SponsorsPanel';
 
 const initialMatchDetails = {
-  teams: { teamA: null, teamB: null, },
-  teamLogos: { teamA: null, teamB: null, },
-  matchHeader: null,
-  extendedInfo: null,
-  stadium: null,
-  competitionLogo: null,
+  teams: { teamA: 'Equipo Local Demo', teamB: 'Equipo Visitante Demo' },
+  teamLogos: {
+    teamA: 'logo192.png',
+    teamB: 'logo.svg'
+  },
+  matchHeader: 'CATEGORIA - Division',
+  extendedInfo: 'Fase - Jornada X',
+  stadium: 'Pabellón donde se juega, Ciudad',
+  competitionLogo: 'sample_logo.jpg',
   maxSets: 5,
   stats: {
-    teamA: { ranking: 0, matchesPlayed: 0, totalMatchesWon: 0, won3Points: 0, won2Points: 0, totalMatchesLost: 0, lost1Point: 0, lost0Points: 0, totalPointsScored: 0, totalPointsReceived: 0, },
-    teamB: { ranking: 0, matchesPlayed: 0, totalMatchesWon: 0, won3Points: 0, won2Points: 0, totalMatchesLost: 0, lost1Point: 0, lost0Points: 0, totalPointsScored: 0, totalPointsReceived: 0, }
+    teamA: {
+      ranking: 0, competitionPoints: 0, matchesPlayed: 0, totalMatchesWon: 0, won3Points: 0, won2Points: 0, totalMatchesLost: 0, lost1Point: 0, lost0Points: 0, totalPointsScored: 0, totalPointsReceived: 0,
+    },
+    teamB: {
+      ranking: 0, competitionPoints: 0, matchesPlayed: 0, totalMatchesWon: 0, won3Points: 0, won2Points: 0, totalMatchesLost: 0, lost1Point: 0, lost0Points: 0, totalPointsScored: 0, totalPointsReceived: 0,
+    }
   },
 };
 
@@ -94,7 +101,7 @@ function App() {
     const extractedKey = urlParams.get('key');
 
     if (extractedKey) {
-       setConnectionStatus('connecting');
+      setConnectionStatus('connecting');
 
       // Connect to the Socket.io server using the extracted key
       const socketInstance = io(SOCKET_SERVER_URL, {
@@ -161,6 +168,9 @@ function App() {
     } else {
       console.error('No key found in URL');
       setConnectionStatus('no-connection');
+      setMatchDetails(initialMatchDetails);
+      setMatchData(initialMatchData);
+      setConfig(initialConfig);
     }
   }, []);
 
@@ -226,8 +236,8 @@ function App() {
       {connectionStatus === 'connecting' && <div className="connecting-animation">Conectando con el servidor de mensajería...</div>}
       {connectionStatus === 'handshake-pending' && <div className="connecting-animation">Conectado al servidor de mensajería. Comunicando con la aplicación de control...</div>}
       {connectionStatus === 'handshake-success' && <div className="success-message">Comunicación establecida!</div>}
-      
-      {matchData !=null && (
+
+      {matchData != null && (
         <>
           <Scoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
           <VerticalTableScoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
@@ -241,8 +251,8 @@ function App() {
       {/* Control buttons for demonstration */}
       {connectionStatus === 'no-connection' && (
         <div className="controls">
-          <div style={{ width: '40px', height: 'auto' }}>
-            <UniformIcon shirtColor={'#0011ffff'} shortsColor={'#1dfc09ff'} shirtNumber={22}/>
+          <div style={{ width: '30px', height: 'auto' }}>
+            <UniformIcon shirtColor={'#0011ffff'} shortsColor={'#1dfc09ff'} shirtNumber={22} />
           </div>
           <button onClick={handleConfigUpdate}>
             Toggle Scoreboard Visibility (Enabled: {config.scoreboard.enabled.toString()})
@@ -279,6 +289,9 @@ function App() {
           </button>
           <button onClick={() => handleToggleComponent('afterMatch')}>
             Toggle AfterMatch ({config.afterMatch.enabled.toString()})
+          </button>
+          <button onClick={() => handleToggleComponent('sponsors')}>
+            Toggle SponsorsPanel ({config.sponsors.enabled.toString()})
           </button>
         </div>
       )}
