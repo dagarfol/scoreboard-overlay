@@ -1,5 +1,6 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
+import { OverlayProvider, ScalableCanvas } from './contexts/OverlayContext';
 import Scoreboard from './Scoreboard';
 import VerticalTableScoreboard from './VerticalTableScoreboard';
 import MatchupPresentation from './MatchupPresentation';
@@ -249,7 +250,8 @@ function App() {
     }));
   };
   return (
-    <div>
+    <OverlayProvider width={1280} height={720}>
+      <ScalableCanvas>
         {connectionStatus === 'connecting' && <div className="connecting-animation">Conectando con el servidor de mensajería...</div>}
         {connectionStatus === 'handshake-pending' && <div className="connecting-animation">Conectado al servidor de mensajería. Comunicando con la aplicación de control...</div>}
         {connectionStatus === 'handshake-success' && <div className="success-message">Comunicación establecida!</div>}
@@ -324,7 +326,8 @@ function App() {
             </button>
           </div>
         )}
-    </div>
+      </ScalableCanvas>
+    </OverlayProvider>
   );
 }
 
