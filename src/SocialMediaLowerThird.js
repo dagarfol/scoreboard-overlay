@@ -4,7 +4,7 @@ import styles from './SocialMediaLowerThird.module.css';
 import useComponentVisibility from './hooks/useComponentVisibility';
 
 const SocialMediaLowerThird = ({ socialMediaConfig }) => {
-  const { enabled, channels } = socialMediaConfig;
+  const { enabled, channels, position } = socialMediaConfig;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { isVisible, animationClass } = useComponentVisibility(enabled, 500);
@@ -21,6 +21,7 @@ const SocialMediaLowerThird = ({ socialMediaConfig }) => {
 
   if (!isVisible || !channels || channels.length === 0) return null;
 
+  const positionClass = position ? styles[position] : '';
   const currentChannel = channels[currentIndex];
   const { network, handle, icon } = currentChannel;
 
@@ -37,7 +38,7 @@ const SocialMediaLowerThird = ({ socialMediaConfig }) => {
   };
 
   return (
-    <div className={`${styles['social-wrapper']} ${styles[animationClass]}`}>
+    <div className={`${styles['social-wrapper']} ${positionClass} ${styles[animationClass]}`}>
       <div className={styles['social-container']}>
         <div className={styles['icon-section']}>
           {icon && <img src={icon} alt={network} className={styles['network-icon']} />}
