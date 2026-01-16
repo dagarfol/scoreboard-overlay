@@ -1,11 +1,13 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
+import { OverlayProvider, ScalableCanvas } from './contexts/OverlayContext';
 import Scoreboard from './Scoreboard';
 import VerticalTableScoreboard from './VerticalTableScoreboard';
 import MatchupPresentation from './MatchupPresentation';
 import LowerThirdMatchup from './LowerThirdMatchup';
 import TeamComparisonTable from './TeamComparisonTable';
 import AfterMatchStats from './AfterMatchStats';
+import SocialMediaLowerThird from './SocialMediaLowerThird';
 import io from 'socket.io-client';
 import './App.css';
 import UniformIcon from './UniformIcon';
@@ -68,6 +70,17 @@ const initialConfig = {
   lowerThird: {
     enabled: false,
   },
+  socialMedia: {
+    enabled: false,
+    position: 'top-left',
+    channels: [
+      { network: 'YouTube', handle: 'YourChannelName', icon: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png' },
+      { network: 'TikTok', handle: 'YourTikTokHandle', icon: 'https://images.seeklogo.com/logo-png/34/2/tiktok-logo-png_seeklogo-340606.png' },
+      { network: 'Instagram', handle: 'YourInstagram', icon: 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Instagram-Gradient-Logo-PNG.png' },
+      { network: 'Twitch', handle: 'YourTwitchChannel', icon: 'https://images.seeklogo.com/logo-png/44/2/twitch-new-logo-png_seeklogo-447573.png' },
+      { network: 'Facebook', handle: 'YourFacebook', icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png' },
+    ],
+  },
   teamComparison: {
     enabled: false,
   },
@@ -89,7 +102,7 @@ const initialConfig = {
   },
 };
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_URL || 'http://localhost:3005';
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKET_URL;
 
 function App() {
   const [matchDetails, setMatchDetails] = useState(null);
@@ -216,15 +229,16 @@ function App() {
   };
 
   // Handler for the position dropdown selector
-  const handlePositionChange = (event) => {
-    setConfig(prevConfig => ({
-      ...prevConfig,
-      scoreboard: {
-        ...prevConfig.scoreboard,
-        position: event.target.value,
-      },
-    }));
-  };
+    const handleSelectChange = (section, key, value) => {
+        const updatedConfig = {
+            ...config,
+            [section]: {
+                ...config[section],
+                [key]: value,
+            },
+        };
+        setConfig(updatedConfig);
+    };
   // --- Generic Handler for toggling component visibility ---
   const handleToggleComponent = (componentName) => {
     setConfig(prevConfig => ({
@@ -236,70 +250,84 @@ function App() {
     }));
   };
   return (
-    <div>
-      {connectionStatus === 'connecting' && <div className="connecting-animation">Conectando con el servidor de mensajería...</div>}
-      {connectionStatus === 'handshake-pending' && <div className="connecting-animation">Conectado al servidor de mensajería. Comunicando con la aplicación de control...</div>}
-      {connectionStatus === 'handshake-success' && <div className="success-message">Comunicación establecida!</div>}
+    <OverlayProvider width={1280} height={720}>
+      <ScalableCanvas>
+        {connectionStatus === 'connecting' && <div className="connecting-animation">Conectando con el servidor de mensajería...</div>}
+        {connectionStatus === 'handshake-pending' && <div className="connecting-animation">Conectado al servidor de mensajería. Comunicando con la aplicación de control...</div>}
+        {connectionStatus === 'handshake-success' && <div className="success-message">Comunicación establecida!</div>}
 
-      {matchData != null && (
-        <>
-          <Scoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
-          <VerticalTableScoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
-          <MatchupPresentation matchDetails={matchDetails} enabled={config.matchup.enabled} />
-          <LowerThirdMatchup matchDetails={matchDetails} enabled={config.lowerThird.enabled} />
-          <TeamComparisonTable matchDetails={matchDetails} enabled={config.teamComparison.enabled} />
-          <AfterMatchStats matchDetails={matchDetails} matchData={matchData} afterMatchConfig={config.afterMatch} />
-          <SponsorsPanel sponsorsConfig={config.sponsors} />
-        </>
-      )}
-      {/* Control buttons for demonstration */}
-      {connectionStatus === 'no-connection' && (
-        <div className="controls">
-          <div style={{ width: '30px', height: 'auto' }}>
-            <UniformIcon shirtColor={'#0011ffff'} shortsColor={'#1dfc09ff'} shirtNumber={22} />
+        {matchData != null && (
+          <>
+            <Scoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
+            <VerticalTableScoreboard matchDetails={matchDetails} matchData={matchData} scoreboardConfig={config.scoreboard} />
+            <MatchupPresentation matchDetails={matchDetails} enabled={config.matchup.enabled} />
+            <LowerThirdMatchup matchDetails={matchDetails} enabled={config.lowerThird.enabled} />
+            <SocialMediaLowerThird socialMediaConfig={config.socialMedia} />
+            <TeamComparisonTable matchDetails={matchDetails} enabled={config.teamComparison.enabled} />
+            <AfterMatchStats matchDetails={matchDetails} matchData={matchData} afterMatchConfig={config.afterMatch} />
+            <SponsorsPanel sponsorsConfig={config.sponsors} />
+          </>
+        )}
+        {/* Control buttons for demonstration */}
+        {connectionStatus === 'no-connection' && (
+          <div className="controls">
+            <div style={{ width: '30px', height: 'auto' }}>
+              <UniformIcon shirtColor={'#0011ffff'} shortsColor={'#1dfc09ff'} shirtNumber={22} />
+            </div>
+            <button onClick={handleConfigUpdate}>
+              Toggle Scoreboard Visibility (Enabled: {config.scoreboard.enabled.toString()})
+            </button>
+            <button onClick={handleToggleScoreboardType}>
+              Switch Scoreboard Style (Current: {config.scoreboard.type})
+            </button>
+            <label htmlFor="position-select" style={{ marginLeft: '15px' }}>Position:</label>
+            <select id="position-select" value={config.scoreboard.position} onChange={(e) => handleSelectChange('scoreboard', 'position', e.target.value)}>
+              <option value="top">Top</option>
+              <option value="top-left">Top Left</option>
+              <option value="top-right">Top Right</option>
+              <option value="bottom">Bottom</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="bottom-left">Bottom Left</option>
+            </select>
+            <button onClick={() => triggerMatchEvent('referee-call', { text: 'Fault', team: 'Team A' })}>
+              Fault
+            </button>
+            <button onClick={() => triggerMatchEvent('timeout', { text: 'Timeout', team: 'Team A' })}>
+              Timeout
+            </button>
+            <button onClick={() => triggerMatchEvent('substitution', { text: 'Subsitution', team: 'Team B' })}>
+              Player Substitution
+            </button>
+            <button onClick={() => handleToggleComponent('matchup')}>
+              Toggle Matchup ({config.matchup.enabled.toString()})
+            </button>
+            <button onClick={() => handleToggleComponent('lowerThird')}>
+              Toggle LowerThird ({config.lowerThird.enabled.toString()})
+            </button>
+            <button onClick={() => handleToggleComponent('socialMedia')}>
+              Toggle SocialMedia ({config.socialMedia.enabled.toString()})
+            </button>
+            <select id="socialmedia-position-select" value={config.socialMedia.position} onChange={(e) => handleSelectChange('socialMedia', 'position', e.target.value)}>
+              <option value="top">Top</option>
+              <option value="top-left">Top Left</option>
+              <option value="top-right">Top Right</option>
+              <option value="bottom">Bottom</option>
+              <option value="bottom-right">Bottom Right</option>
+              <option value="bottom-left">Bottom Left</option>
+            </select>
+            <button onClick={() => handleToggleComponent('teamComparison')}>
+              Toggle TeamComparison ({config.teamComparison.enabled.toString()})
+            </button>
+            <button onClick={() => handleToggleComponent('afterMatch')}>
+              Toggle AfterMatch ({config.afterMatch.enabled.toString()})
+            </button>
+            <button onClick={() => handleToggleComponent('sponsors')}>
+              Toggle SponsorsPanel ({config.sponsors.enabled.toString()})
+            </button>
           </div>
-          <button onClick={handleConfigUpdate}>
-            Toggle Scoreboard Visibility (Enabled: {config.scoreboard.enabled.toString()})
-          </button>
-          <button onClick={handleToggleScoreboardType}>
-            Switch Scoreboard Style (Current: {config.scoreboard.type})
-          </button>
-          <label htmlFor="position-select" style={{ marginLeft: '15px' }}>Position:</label>
-          <select id="position-select" value={config.scoreboard.position} onChange={handlePositionChange}>
-            <option value="top">Top</option>
-            <option value="top-left">Top Left</option>
-            <option value="top-right">Top Right</option>
-            <option value="bottom">Bottom</option>
-            <option value="bottom-right">Bottom Right</option>
-            <option value="bottom-left">Bottom Left</option>
-          </select>
-          <button onClick={() => triggerMatchEvent('referee-call', { text: 'Fault', team: 'Team A' })}>
-            Fault
-          </button>
-          <button onClick={() => triggerMatchEvent('timeout', { text: 'Timeout', team: 'Team A' })}>
-            Timeout
-          </button>
-          <button onClick={() => triggerMatchEvent('substitution', { text: 'Subsitution', team: 'Team B' })}>
-            Player Substitution
-          </button>
-          <button onClick={() => handleToggleComponent('matchup')}>
-            Toggle Matchup ({config.matchup.enabled.toString()})
-          </button>
-          <button onClick={() => handleToggleComponent('lowerThird')}>
-            Toggle LowerThird ({config.lowerThird.enabled.toString()})
-          </button>
-          <button onClick={() => handleToggleComponent('teamComparison')}>
-            Toggle TeamComparison ({config.teamComparison.enabled.toString()})
-          </button>
-          <button onClick={() => handleToggleComponent('afterMatch')}>
-            Toggle AfterMatch ({config.afterMatch.enabled.toString()})
-          </button>
-          <button onClick={() => handleToggleComponent('sponsors')}>
-            Toggle SponsorsPanel ({config.sponsors.enabled.toString()})
-          </button>
-        </div>
-      )}
-    </div>
+        )}
+      </ScalableCanvas>
+    </OverlayProvider>
   );
 }
 
