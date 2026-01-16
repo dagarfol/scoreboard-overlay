@@ -289,13 +289,13 @@ function App() {
               <option value="bottom-right">Bottom Right</option>
               <option value="bottom-left">Bottom Left</option>
             </select>
-            <button onClick={() => triggerMatchEvent('referee-call', { text: 'Fault', team: 'Team A' })}>
+            <button onClick={() => triggerMatchEvent('referee-call', { text: 'Fault', team: matchDetails.teams.teamA })}>
               Fault
             </button>
-            <button onClick={() => triggerMatchEvent('timeout', { text: 'Timeout', team: 'Team A' })}>
+            <button onClick={() => triggerMatchEvent('timeout', { text: 'Timeout', team: matchDetails.teams.teamA })}>
               Timeout
             </button>
-            <button onClick={() => triggerMatchEvent('substitution', { text: 'Subsitution', team: 'Team B' })}>
+            <button onClick={() => triggerMatchEvent('substitution', { text: 'Subsitution', team: matchDetails.teams.teamA })}>
               Player Substitution
             </button>
             <button onClick={() => handleToggleComponent('matchup')}>
