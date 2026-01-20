@@ -66,7 +66,6 @@
 .header-cell {
   padding: 10px 15px;
   text-align: center;
-  border-right: 1px solid #34495e;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,18 +85,12 @@
     font-size: 1.5rem;
 }
 
-/* .team-logo {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  border: 3px solid #3498db;
-} */
  .logo-container {
   position: relative; /* Needed for positioning the pseudo-element */
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .team-logo {
@@ -109,7 +102,7 @@
 }
 
 /* Glossy animation effect */
-.winner > .logo-container::after {
+.winner .logo-container::after {
   content: '';
   position: absolute;
   top: 0;
@@ -123,19 +116,23 @@
     rgba(255, 255, 255, 0) 100%
   );
   transform: skewX(-20deg); /* Angle the sweep */
-  animation: shine 3s infinite linear;
+  animation: shine 1.5s infinite linear;
 }
 
 @keyframes shine {
-  0% { left: -200%; }
-  100% { left: 200%; } /* End the sweep off-screen to the right */
+  0% { left: -100%; }
+  100% { left: 100%; } /* End the sweep off-screen to the right */
 }
 
+.winner .logo-container {
+  box-shadow: 0 4px 20px #e67e22;;
+}
 
 .team-name {
   font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
+  z-index: 1;
 }
 
 .final-score {
@@ -191,9 +188,11 @@
   padding: 8px 15px;
   background-color: #34495e;
   font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02rem;
   text-align: center;
-  color: #bdc3c7;
-  text-transform: uppercase; /* Uppercase stat labels */
+  color: #ecf0f1;
+  text-transform: uppercase;
 }
 
 .after-match-table tbody tr:nth-child(odd) .stat-value {

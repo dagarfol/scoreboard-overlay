@@ -7,7 +7,7 @@ const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
 
     const { isVisible, animationClass } = useComponentVisibility(afterMatchConfig.enabled, 500);
     if (!isVisible) return null;
-    const { statistics, winner, setsWon, setScores, scores, matchStarted, } = matchData;
+    const { statistics, currentSetStats, winner, setsWon, setScores, scores, matchStarted, } = matchData;
     const { matchHeader, competitionLogo, extendedInfo, } = matchDetails;
 
     const stats = [
@@ -37,19 +37,21 @@ const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
             <table className={styles["after-match-table"]}>
                 <thead>
                     <tr>
-                        <th className={`${styles["header-cell"]} ${winner === "teamA" ? styles["winner"] : ""}`}>
-                            <div className={styles['logo-container']}>
-                                <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles["team-logo"]} />
+                        <th className={`${winner === "teamA" ? styles["winner"] : ""}`}>
+                            <div className={styles["header-cell"]}>
+                                <div className={styles['logo-container']}>
+                                    <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles["team-logo"]} />
+                                </div>
+                                <div className={styles["team-name"]}>{matchDetails.teams.teamA}</div>
                             </div>
-                            <div className={styles["team-name"]}>{matchDetails.teams.teamA}</div>
                         </th>
                         <th className={styles["empty-cell"]}>
                             <div>
-                                <span>{winner ? "FINAL" : (matchStarted? "TIEMPO MUERTO" : "DESCANSO") }</span>
+                                <span>{winner ? "FINAL" : (matchStarted ? "TIEMPO MUERTO" : "DESCANSO")}</span>
                                 {!winner && (
                                     <>
-                                        <br/>
-                                        <span>{ "SET " + (setScores.length +1) }</span>
+                                        <br />
+                                        <span>{"SET " + (setScores.length + 1)}</span>
                                     </>
                                 )}
                                 <div className={styles["final-score"]}>
@@ -61,9 +63,9 @@ const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
                                 </div>
                                 <div className={styles["set-scores"]}>
                                     {setScores.map((setScore, index) => (
-                                        <div  key={index} >
+                                        <div key={index} >
                                             <span className={`${setScore.teamA > setScore.teamB ? styles["set-winner"] : ""}`}>{setScore.teamA} </span>
-                                             - 
+                                            -
                                             <span className={`${setScore.teamB > setScore.teamA ? styles["set-winner"] : ""}`}> {setScore.teamB}</span>
                                         </div>
                                     ))}
@@ -72,20 +74,22 @@ const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
                                 </div>
                             </div>
                         </th>
-                        <th className={`${styles["header-cell"]} ${winner === "teamB" ? styles["winner"] : ""}`}>
-                            <div className={styles['logo-container']}>
-                                <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles["team-logo"]} />
+                        <th className={`${winner === "teamB" ? styles["winner"] : ""}`}>
+                            <div className={styles["header-cell"]}>
+                                <div className={styles['logo-container']}>
+                                    <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles["team-logo"]} />
+                                </div>
+                                <div className={styles["team-name"]}>{matchDetails.teams.teamB}</div>
                             </div>
-                            <div className={styles["team-name"]}>{matchDetails.teams.teamB}</div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     {afterMatchConfig.showStats && stats.map((stat, index) => (
                         <tr key={index}>
-                            <td className={styles["stat-value"]}>{statistics.teamA[stat.key]}</td>
+                            <td className={styles["stat-value"]}>{winner ? statistics.teamA[stat.key] : currentSetStats.teamA[stat.key]}</td>
                             <td className={styles["stat-label"]}>{stat.label}</td>
-                            <td className={styles["stat-value"]}>{statistics.teamB[stat.key]}</td>
+                            <td className={styles["stat-value"]}>{winner ? statistics.teamB[stat.key] : currentSetStats.teamB[stat.key]}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -9,8 +9,10 @@
     /* The key: Use auto margins to distribute the space equally */
     margin: auto;
     z-index: 100;
-    max-width: fit-content;
-    min-width: fit-content;
+  max-width: 800px;
+  max-height: 200px;
+  width: fit-content;
+  height: fit-content;
     box-sizing: border-box;
     transition: opacity 0.5s ease, transform 0.5s ease;
     opacity: 0;
