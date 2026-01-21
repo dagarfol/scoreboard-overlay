@@ -34,66 +34,84 @@ const AfterMatchStats = ({ matchDetails, matchData, afterMatchConfig }) => {
                     <div className={styles["category"]}>{extendedInfo}</div>
                 </div>
             </div>
-            <table className={styles["after-match-table"]}>
-                <thead>
-                    <tr>
-                        <th className={`${winner === "teamA" ? styles["winner"] : ""}`}>
-                            <div className={styles["header-cell"]}>
-                                <div className={styles['logo-container']}>
-                                    <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles["team-logo"]} />
+            <div className={styles["table-wrapper"]}>
+                <table className={styles["after-match-table"]}>
+                    <thead>
+                        <tr>
+                            <th className={`${winner === "teamA" ? styles["winner"] : ""}`}>
+                                <div className={styles["header-cell"]}>
+                                    <div className={styles['logo-container']}>
+                                        <img src={matchDetails.teamLogos.teamA} alt={matchDetails.teams.teamA} className={styles["team-logo"]} />
+                                    </div>
+                                    <div className={styles["team-name"]}>{matchDetails.teams.teamA}</div>
                                 </div>
-                                <div className={styles["team-name"]}>{matchDetails.teams.teamA}</div>
-                            </div>
-                        </th>
-                        <th className={styles["empty-cell"]}>
-                            <div>
-                                <span>{winner ? "FINAL" : (matchStarted ? "TIEMPO MUERTO" : "DESCANSO")}</span>
-                                {!winner && (
-                                    <>
-                                        <br />
-                                        <span>{"SET " + (setScores.length + 1)}</span>
-                                    </>
-                                )}
-                                <div className={styles["final-score"]}>
-                                    <span className={`${winner === "teamA" ? styles["winner"] : ""}`} >
-                                        {setsWon.teamA}
-                                    </span>
-                                    <span > - </span>
-                                    <span className={`${winner === "teamB" ? styles["winner"] : ""}`}>{setsWon.teamB}</span>
-                                </div>
-                                <div className={styles["set-scores"]}>
-                                    {setScores.map((setScore, index) => (
-                                        <div key={index} >
-                                            <span className={`${setScore.teamA > setScore.teamB ? styles["set-winner"] : ""}`}>{setScore.teamA} </span>
-                                            -
-                                            <span className={`${setScore.teamB > setScore.teamA ? styles["set-winner"] : ""}`}> {setScore.teamB}</span>
-                                        </div>
-                                    ))}
-                                    {!winner && (<div><span className={styles["current-score"]}>{scores.teamA} - {scores.teamB}</span></div>)}
+                            </th>
+                            <th className={styles["empty-cell"]}>
+                                <div>
+                                    <span>{winner ? "FINAL" : (matchStarted ? "TIEMPO MUERTO" : "DESCANSO")}</span>
+                                    {!winner && (
+                                        <>
+                                            <br />
+                                            <span>{"SET " + (setScores.length + 1)}</span>
+                                        </>
+                                    )}
+                                    <div className={styles["final-score"]}>
+                                        <span className={`${winner === "teamA" ? styles["winner"] : ""}`} >
+                                            {setsWon.teamA}
+                                        </span>
+                                        <span > - </span>
+                                        <span className={`${winner === "teamB" ? styles["winner"] : ""}`}>{setsWon.teamB}</span>
+                                    </div>
+                                    <div className={styles["set-scores"]}>
+                                        {setScores.map((setScore, index) => (
+                                            <div key={index} >
+                                                <span className={`${setScore.teamA > setScore.teamB ? styles["set-winner"] : ""}`}>{setScore.teamA} </span>
+                                                -
+                                                <span className={`${setScore.teamB > setScore.teamA ? styles["set-winner"] : ""}`}> {setScore.teamB}</span>
+                                            </div>
+                                        ))}
+                                        {!winner && (<div><span className={styles["current-score"]}>{scores.teamA} - {scores.teamB}</span></div>)}
 
+                                    </div>
                                 </div>
-                            </div>
-                        </th>
-                        <th className={`${winner === "teamB" ? styles["winner"] : ""}`}>
-                            <div className={styles["header-cell"]}>
-                                <div className={styles['logo-container']}>
-                                    <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles["team-logo"]} />
+                            </th>
+                            <th className={`${winner === "teamB" ? styles["winner"] : ""}`}>
+                                <div className={styles["header-cell"]}>
+                                    <div className={styles['logo-container']}>
+                                        <img src={matchDetails.teamLogos.teamB} alt={matchDetails.teams.teamB} className={styles["team-logo"]} />
+                                    </div>
+                                    <div className={styles["team-name"]}>{matchDetails.teams.teamB}</div>
                                 </div>
-                                <div className={styles["team-name"]}>{matchDetails.teams.teamB}</div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {afterMatchConfig.showStats && stats.map((stat, index) => (
-                        <tr key={index}>
-                            <td className={styles["stat-value"]}>{winner ? statistics.teamA[stat.key] : currentSetStats.teamA[stat.key]}</td>
-                            <td className={styles["stat-label"]}>{stat.label}</td>
-                            <td className={styles["stat-value"]}>{winner ? statistics.teamB[stat.key] : currentSetStats.teamB[stat.key]}</td>
+                            </th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                </table>
+                <div className={`${styles['tbody-wrapper']} ${afterMatchConfig.showStats ? styles['stats-visible'] : styles['stats-hidden']}`}>
+                    <table className={styles["after-match-table"]}>
+                        <tbody className={styles['stats-tbody']}>
+                            {stats.map((stat, index) => (
+                                <tr key={index} className={styles['stat-row']}>
+                                    <td className={styles["stat-value"]}>
+                                        <div className={styles['stat-content']}>
+                                            {winner ? statistics.teamA[stat.key] : currentSetStats.teamA[stat.key]}
+                                        </div>
+                                    </td>
+                                    <td className={styles["stat-label"]}>
+                                        <div className={styles['stat-content']}>
+                                            {stat.label}
+                                        </div>
+                                    </td>
+                                    <td className={styles["stat-value"]}>
+                                        <div className={styles['stat-content']}>
+                                            {winner ? statistics.teamB[stat.key] : currentSetStats.teamB[stat.key]}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 };
