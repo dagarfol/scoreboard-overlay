@@ -75,6 +75,7 @@ body {
 
 .controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: min-content;
+  max-width: 1200px;
 }

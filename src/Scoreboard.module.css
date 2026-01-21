@@ -1,142 +1,56 @@
 /* src/Scoreboard.module.css */
-
-/* Add a wrapper for the scoreboard and dropline */
-/* .scoreboard-wrapper {
-  position: fixed;
-  z-index: 100;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  opacity: 0; 
-  transform: translateY(-20px);
-}
-
-.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.fade-out {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-/* Position for the top-left corner * /
-.top-left {
-  top: 20px;
-  left: 20px;
-}
-
-/* Position for the top-center * /
-.top {
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* Position for the top-right corner * /
-.top-right {
-  top: 20px;
-  right: 20px;
-}
-
-/* Position for the bottom-left corner * /
-.bottom-left {
-  bottom: 20px;
-  left: 20px;
-}
-
-/* Position for the bottom-center * /
-.bottom {
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* Position for the bottom-right corner * /
-.bottom-right {
-  bottom: 20px;
-  right: 20px;
-} */
-
 .scoreboard-wrapper {
+    --gap: 3cqi; /* Margen proporcional (equivale a ~20px en 1280px) */
+    
     position: absolute;
-    top: 20px;
-    bottom: 20px;
-    left: 20px; 
-    right: 20px;
-
-    /* The key: Use auto margins to distribute the space equally */
-    margin: auto; 
-
-    /* Define max-width/height if the component shouldn't stretch the full width/height */
-    max-width: 800px; 
-    max-height: 200px;
-    width: fit-content; /* Helps center if max-width isn't reached */
+    top: 0;
+    left: 0;
+    margin: 0;
+    max-width: 60cqi; /* El marcador no ocupará más del 60% del ancho del padre */
+    width: fit-content;
     height: fit-content;
-
-    /* Base opacity and transition for animation */
     opacity: 0;
-    transition: opacity 0.5s ease-out, top 0.5s ease-out, bottom 0.5s ease-out, left 0.5s ease-out, right 0.5s ease-out;
+    pointer-events: none;
+    
+    /* Transición suave de transform y opacity */
+    transition: 
+        opacity 0.5s ease-in-out, 
+        transform 0.7s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .fade-in {
-  opacity: 1;
+    opacity: 1;
+    pointer-events: all;
 }
 
-.fade-out {
-  opacity: 0;
-}
+/* --- POSICIONES DINÁMICAS --- */
 
-/* Position-specific styles now only update the edge constraints (top/bottom/left/right) */
 .top {
-    top: 20px;
-    bottom: auto;
+    transform: translate(calc(50cqi - 50%), var(--gap));
 }
 
 .bottom {
-    top: auto;
-    bottom: 20px;
+    transform: translate(calc(50cqi - 50%), calc(100cqh - 100% - var(--gap)));
 }
 
 .top-left {
-    top: 20px;
-    left: 20px;
-    right: auto;
-    bottom: auto;
-    margin: 0; /* Remove auto margins to stick to the corner */
+    transform: translate(var(--gap), var(--gap));
 }
 
 .top-right {
-    top: 20px;
-    right: 20px;
-    left: auto;
-    bottom: auto;
-    margin: 0;
-}
-
-/* Add styles for bottom-left and bottom-right as needed */
-.bottom-right {
-    bottom: 20px;
-    right: 20px;
-    top: auto;
-    left: auto;
-    margin: 0;
+    transform: translate(calc(100cqi - 100% - var(--gap)), var(--gap));
 }
 
 .bottom-left {
-    bottom: 20px;
-    left: 20px;
-    top: auto;
-    right: auto;
-    margin: 0;
+    transform: translate(var(--gap), calc(100cqh - 100% - var(--gap)));
 }
 
-/* Add a specific "center" position style for true centering */
+.bottom-right {
+    transform: translate(calc(100cqi - 100% - var(--gap)), calc(100cqh - 100% - var(--gap)));
+}
+
 .center {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto; /* Keeps it perfectly centered */
+    transform: translate(calc(50cqi - 50%), calc(50cqh - 50%));
 }
 
 .scoreboard-container {
@@ -149,7 +63,7 @@
   padding: 4px 8px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  width: fit-content;
+  min-width: fit-content;
   margin: 20px auto;
 }
 
@@ -157,7 +71,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 20px;
+  min-width: fit-content;
 }
 
 /* Container for name, indicator, and timeouts */

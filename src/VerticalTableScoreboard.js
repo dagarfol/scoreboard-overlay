@@ -1,7 +1,7 @@
 // src/VerticalScoreboard.js
 import React from 'react';
 import styles from './VerticalTableScoreboard.module.css';
-import useDropline from './hooks/useDropline'; // Import the custom hook
+import useDropline from './hooks/useDropline';
 import DroplinePanel from './DroplinePanel';
 import useComponentVisibility from './hooks/useComponentVisibility';
 import ContentFlipper from './ContentFlipper';
@@ -9,13 +9,13 @@ import UniformIcon from './UniformIcon';
 
 const VerticalTableScoreboard = ({ matchDetails, matchData, scoreboardConfig }) => {
   const { timeouts, scores, setScores, setsWon, currentServer } = matchData;
-  const { panelData, shouldAnimate } = useDropline(matchData.matchEvent); // Use the custom hook
+  const { panelData, shouldAnimate } = useDropline(matchData.matchEvent);
   const { isVisible, animationClass } = useComponentVisibility(scoreboardConfig.enabled && (scoreboardConfig.type === 'vertical-table'), 500);
+
   if (!isVisible) return null;
 
   const positionClass = scoreboardConfig.position ? styles[scoreboardConfig.position] : '';
   const isTopPosition = scoreboardConfig.position && scoreboardConfig.position.startsWith('top');
-
 
   const renderTeamRow = (team) => {
     const timeoutIndicators = [...Array(2)].map((_, index) => (
@@ -32,7 +32,7 @@ const VerticalTableScoreboard = ({ matchDetails, matchData, scoreboardConfig }) 
         <td className={styles['team-cell']}>
           <div className={styles['team-cell-content']}>
             <ContentFlipper
-              duration={15} // 8 segundos por ciclo completo
+              duration={15}
               width={flipperContentSize}
               height={flipperContentSize}
               front={
@@ -42,7 +42,6 @@ const VerticalTableScoreboard = ({ matchDetails, matchData, scoreboardConfig }) 
                 <UniformIcon shirtColor={matchDetails.teamColors[team]} size={flipperContentSize} />
               }
             />
-
             <span className={styles['team-name']}>{matchDetails.teams[team]}</span>
           </div>
           <div className={styles['team-cell-indicators']}>
@@ -51,11 +50,16 @@ const VerticalTableScoreboard = ({ matchDetails, matchData, scoreboardConfig }) 
           </div>
         </td>
         <td className={styles['sets-won-cell']}>{setsWon[team]}</td>
-        {setScores.length > 0 && (setScores.map((setScore, index) => (
-          <td key={index} className={styles['set-points-cell']}>
-            {setScore[team]}
+        {setScores.length > 0 && setScores.map((setScore, index) => (
+          <td
+            key={index}
+            className={`${styles['set-points-cell']} ${scoreboardConfig.showHistory ? styles['history-visible'] : styles['history-hidden']}`}
+          >
+            <div className={styles['set-points-content']}>
+              {setScore[team]}
+            </div>
           </td>
-        )))}
+        ))}
         <td className={styles['current-score-cell']}>{scores[team]}</td>
       </tr>
     );
@@ -74,7 +78,7 @@ const VerticalTableScoreboard = ({ matchDetails, matchData, scoreboardConfig }) 
           icon={panelData.icon}
           textLine1={panelData.textLine1}
           textLine2={panelData.textLine2}
-          isTopPosition={isTopPosition} // Pass the position prop
+          isTopPosition={isTopPosition}
           isAnimatedIn={shouldAnimate}
         />
       )}

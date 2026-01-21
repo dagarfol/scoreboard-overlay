@@ -1,83 +1,69 @@
 /* src/VerticalTableScoreboard.css */
 /* Wrapper for the scoreboard table */
 .scoreboard-wrapper {
+    --gap: 3cqi; /* Margen proporcional (equivale a ~20px en 1280px) */
+    
     position: absolute;
-    top: 20px;
-    bottom: 20px;
-    left: 20px; 
-    right: 20px;
-
-    /* The key: Use auto margins to distribute the space equally */
-    margin: auto; 
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  opacity: 0; 
+    top: 0;
+    left: 0;
+    margin: 0;
+    max-width: 60cqi; /* El marcador no ocupará más del 60% del ancho del padre */
+    width: fit-content;
+    height: fit-content;
+    opacity: 0;
+    pointer-events: none;
+    
+    /* Transición suave de transform y opacity */
+    transition: 
+        opacity 0.5s ease-in-out, 
+        transform 0.7s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .fade-in {
-  opacity: 1;
+    opacity: 1;
+    pointer-events: all;
 }
 
-.fade-out {
-  opacity: 0;
-}
+/* --- POSICIONES DINÁMICAS --- */
 
-/* Position-specific styles now only update the edge constraints (top/bottom/left/right) */
 .top {
-    top: 20px;
-    bottom: auto;
+    transform: translate(calc(50cqi - 50%), var(--gap));
 }
 
 .bottom {
-    top: auto;
-    bottom: 20px;
+    transform: translate(calc(50cqi - 50%), calc(100cqh - 100% - var(--gap)));
 }
 
 .top-left {
-    top: 20px;
-    left: 20px;
-    right: auto;
-    bottom: auto;
-    margin: 0; /* Remove auto margins to stick to the corner */
+    transform: translate(var(--gap), var(--gap));
 }
 
 .top-right {
-    top: 20px;
-    right: 20px;
-    left: auto;
-    bottom: auto;
-    margin: 0;
-}
-
-/* Add styles for bottom-left and bottom-right as needed */
-.bottom-right {
-    bottom: 20px;
-    right: 20px;
-    top: auto;
-    left: auto;
-    margin: 0;
+    transform: translate(calc(100cqi - 100% - var(--gap)), var(--gap));
 }
 
 .bottom-left {
-    bottom: 20px;
-    left: 20px;
-    top: auto;
-    right: auto;
-    margin: 0;
+    transform: translate(var(--gap), calc(100cqh - 100% - var(--gap)));
 }
 
-.table-container {
-  margin: 10px auto;
-  width: fit-content;
-  font-family: Arial, sans-serif;
-  color: #ecf0f1;
+.bottom-right {
+    transform: translate(calc(100cqi - 100% - var(--gap)), calc(100cqh - 100% - var(--gap)));
+}
+
+.center {
+    transform: translate(calc(50cqi - 50%), calc(50cqh - 50%));
 }
 
 .scoreboard-table {
-  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  color: #ecf0f1;
   background-color: #2c3e50;
   border-radius: 6px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed; /* Important for consistent column behavior */
 }
 
 .scoreboard-table td {
@@ -85,18 +71,17 @@
   text-align: center;
   border-right: 1px solid #34495e;
   vertical-align: middle;
-  /* font-size: 0.8rem; */
 }
 
 .team-logo {
-  width: 30px; /* Smaller logo */
-  height: 30px; /* Smaller logo */
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 1px solid #3498db; /* Thinner border */
+  border: 1px solid #3498db;
 }
 
 .team-name {
-  font-size: 1rem; /* Smaller font for team names */
+  font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -123,23 +108,20 @@
   gap: 5px;
 }
 
-/* === MODIFIED STYLES START === */
-
 /* Serving indicator styling */
 .serving-indicator {
   width: 0;
   height: 0;
-  border-top: 7px solid transparent; /* Half the height of the triangle */
-  border-bottom: 7px solid transparent; /* Half the height of the triangle */
-  border-right: 15px solid #2ecc71; /* Color and size of the triangle */
-  /* margin-right: 5px; */
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 15px solid #2ecc71;
   margin-left: 3px;
 }
+
 .serving-indicator.not-serving {
-    border-right: 15px solid transparent;
+  border-right: 15px solid transparent;
 }
 
-/* To ensure correct alignment with the indicators */
 .team-cell:last-child .serving-indicator {
   border-right: none;
   border-left: 5px solid #2ecc71;
@@ -156,36 +138,74 @@
 .timeout-indicator {
   width: 6px;
   height: 6px;
-  background-color: #5d6d7e; /* Inactive/available timeout color */
+  background-color: #5d6d7e;
   border-radius: 50%;
   border: 1px solid #bdc3c7;
 }
 
 .timeout-indicator.used {
-  background-color: #bdc3c7; /* A solid, filled color for used timeouts */
+  background-color: #bdc3c7;
 }
 
-/* === MODIFIED STYLES END === */
-
 /* Other cells */
-.sets-won-cell {
+.scoreboard-table td.sets-won-cell {
   font-weight: bold;
   font-size: 0.9rem;
   color: #2c3e50;
   background-color: #f1c40f;
+  width: 30px;
 }
 
-.set-points-cell {
-  color: #bdc3c7;
-  font-size: 0.8rem;
+/* ===== IMPROVED SET POINTS CELL ANIMATION ===== */
+.scoreboard-table td.set-points-cell {
+  padding: 4px 0;
+  overflow: hidden;
+  position: relative;
+  border-right: 1px solid #34495e;
+  transition: 
+    max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease 0.1s;
 }
 
-.current-score-cell {
+.scoreboard-table td.set-points-cell.history-visible {
+  max-width: 50px;
+  width: 30px;
+  opacity: 1;
+}
+
+.scoreboard-table td.set-points-cell.history-hidden {
+  max-width: 0;
+  width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-right-width: 0;
+  opacity: 0;
+}
+
+/* Inner content wrapper for smooth animation */
+.set-points-content {
+  display: inline-block;
+  white-space: nowrap;
+  min-width: 50px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.history-hidden .set-points-content {
+  transform: scale(0);
+}
+
+.history-visible .set-points-content {
+  transform: scale(1);
+}
+
+.scoreboard-table td.current-score-cell {
   font-weight: bold;
   font-size: 1.2rem;
   color: #ecf0f1;
   background-color: #3498db;
   border-right: none;
+  width: 30px;
 }
 
 @keyframes pulse {
@@ -195,9 +215,4 @@
   50% {
     transform: translateY(-50%) scale(1.2);
   }
-
-}
-/* To ensure correct vertical alignment */
-.scoreboard-table td {
-  vertical-align: middle;
 }

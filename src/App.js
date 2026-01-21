@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
-import { OverlayProvider, ScalableCanvas } from './contexts/OverlayContext';
+import { OverlayProvider } from './contexts/OverlayContext';
 import Scoreboard from './Scoreboard';
 import VerticalTableScoreboard from './VerticalTableScoreboard';
 import MatchupPresentation from './MatchupPresentation';
@@ -10,7 +10,6 @@ import AfterMatchStats from './AfterMatchStats';
 import SocialMediaLowerThird from './SocialMediaLowerThird';
 import io from 'socket.io-client';
 import './App.css';
-import UniformIcon from './UniformIcon';
 import SponsorsPanel from './SponsorsPanel';
 
 const initialMatchDetails = {
@@ -40,13 +39,17 @@ const initialMatchDetails = {
 
 const initialMatchData = {
   scores: { teamA: 0, teamB: 0 },
-  setsWon: { teamA: 0, teamB: 0 },
-  setScores: [],//{ teamA: 0, teamB: 0 },],
+  setsWon: { teamA: 1, teamB: 1 },
+  setScores: [{ teamA: 25, teamB: 23 }, { teamA: 23, teamB: 25 },],
   currentServer: null,
   ballPossession: null,
   matchStarted: false,
   timeouts: { teamA: 0, teamB: 0 },
   statistics: {
+    teamA: {},
+    teamB: {},
+  },
+  currentSetStats: {
     teamA: {},
     teamB: {},
   },
@@ -61,6 +64,7 @@ const initialMatchData = {
 const initialConfig = {
   scoreboard: {
     enabled: false,
+    showHistory: true,
     type: 'classic',
     position: 'top',
   },
@@ -206,13 +210,13 @@ function App() {
     }));
   };
 
-  const handleConfigUpdate = () => {
+  const handleToggleScoreboardHistory = () => {
     // Example: Toggle the scoreboard enabled state
     setConfig(prevConfig => ({
       ...prevConfig,
       scoreboard: {
         ...prevConfig.scoreboard,
-        enabled: !prevConfig.scoreboard.enabled,
+        showHistory: !prevConfig.scoreboard.showHistory,
       },
     }));
   };
@@ -229,16 +233,16 @@ function App() {
   };
 
   // Handler for the position dropdown selector
-    const handleSelectChange = (section, key, value) => {
-        const updatedConfig = {
-            ...config,
-            [section]: {
-                ...config[section],
-                [key]: value,
-            },
-        };
-        setConfig(updatedConfig);
+  const handleSelectChange = (section, key, value) => {
+    const updatedConfig = {
+      ...config,
+      [section]: {
+        ...config[section],
+        [key]: value,
+      },
     };
+    setConfig(updatedConfig);
+  };
   // --- Generic Handler for toggling component visibility ---
   const handleToggleComponent = (componentName) => {
     setConfig(prevConfig => ({
@@ -250,8 +254,72 @@ function App() {
     }));
   };
   return (
-    <OverlayProvider width={1280} height={720}>
-      <ScalableCanvas>
+    <>
+      {/* Control buttons for demonstration */}
+      {connectionStatus === 'no-connection' && (
+        <div className="controls">
+          <button onClick={() => handleToggleComponent('scoreboard')}>
+            Toggle Scoreboard Visibility (Enabled: {config.scoreboard.enabled.toString()})
+          </button>
+          <button onClick={handleToggleScoreboardType}>
+            Switch Scoreboard Style (Current: {config.scoreboard.type})
+          </button>
+          <label htmlFor="position-select" style={{ marginLeft: '15px' }}>Position:</label>
+          <select id="position-select" value={config.scoreboard.position} onChange={(e) => handleSelectChange('scoreboard', 'position', e.target.value)}>
+            <option value="top">Top</option>
+            <option value="top-left">Top Left</option>
+            <option value="top-right">Top Right</option>
+            <option value="bottom">Bottom</option>
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="center">Center</option>
+          </select>
+          {config.scoreboard.type === 'vertical-table' && (
+            <button onClick={handleToggleScoreboardHistory}>
+              Toggle Scoreboard history (Current: {config.scoreboard.showHistory.toString()})
+            </button>)}
+          <button onClick={() => triggerMatchEvent('referee-call', { text: 'Fault', team: matchDetails.teams.teamA })}>
+            Fault
+          </button>
+          <button onClick={() => triggerMatchEvent('timeout', { text: 'Timeout', team: matchDetails.teams.teamA })}>
+            Timeout
+          </button>
+          <button onClick={() => triggerMatchEvent('substitution', { text: 'Subsitution', team: matchDetails.teams.teamA })}>
+            Player Substitution
+          </button>
+          <button onClick={() => handleToggleComponent('matchup')}>
+            Toggle Matchup ({config.matchup.enabled.toString()})
+          </button>
+          <button onClick={() => handleToggleComponent('lowerThird')}>
+            Toggle LowerThird ({config.lowerThird.enabled.toString()})
+          </button>
+          <button onClick={() => handleToggleComponent('socialMedia')}>
+            Toggle SocialMedia ({config.socialMedia.enabled.toString()})
+          </button>
+          <select id="socialmedia-position-select" value={config.socialMedia.position} onChange={(e) => handleSelectChange('socialMedia', 'position', e.target.value)}>
+            <option value="top">Top</option>
+            <option value="top-left">Top Left</option>
+            <option value="top-right">Top Right</option>
+            <option value="bottom">Bottom</option>
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="center">Center</option>
+          </select>
+          <button onClick={() => handleToggleComponent('teamComparison')}>
+            Toggle TeamComparison ({config.teamComparison.enabled.toString()})
+          </button>
+          <button onClick={() => handleToggleComponent('afterMatch')}>
+            Toggle AfterMatch ({config.afterMatch.enabled.toString()})
+          </button>
+          <button onClick={() => handleSelectChange('afterMatch', 'showStats', !config.afterMatch.showStats)}>
+            Toggle AfterMatch stats ({config.afterMatch.showStats.toString()})
+          </button>
+          <button onClick={() => handleToggleComponent('sponsors')}>
+            Toggle SponsorsPanel ({config.sponsors.enabled.toString()})
+          </button>
+        </div>
+      )}
+      <OverlayProvider width={1280} height={720} connectionStatus={connectionStatus}>
         {connectionStatus === 'connecting' && <div className="connecting-animation">Conectando con el servidor de mensajería...</div>}
         {connectionStatus === 'handshake-pending' && <div className="connecting-animation">Conectado al servidor de mensajería. Comunicando con la aplicación de control...</div>}
         {connectionStatus === 'handshake-success' && <div className="success-message">Comunicación establecida!</div>}
@@ -268,66 +336,8 @@ function App() {
             <SponsorsPanel sponsorsConfig={config.sponsors} />
           </>
         )}
-        {/* Control buttons for demonstration */}
-        {connectionStatus === 'no-connection' && (
-          <div className="controls">
-            <div style={{ width: '30px', height: 'auto' }}>
-              <UniformIcon shirtColor={'#0011ffff'} shortsColor={'#1dfc09ff'} shirtNumber={22} />
-            </div>
-            <button onClick={handleConfigUpdate}>
-              Toggle Scoreboard Visibility (Enabled: {config.scoreboard.enabled.toString()})
-            </button>
-            <button onClick={handleToggleScoreboardType}>
-              Switch Scoreboard Style (Current: {config.scoreboard.type})
-            </button>
-            <label htmlFor="position-select" style={{ marginLeft: '15px' }}>Position:</label>
-            <select id="position-select" value={config.scoreboard.position} onChange={(e) => handleSelectChange('scoreboard', 'position', e.target.value)}>
-              <option value="top">Top</option>
-              <option value="top-left">Top Left</option>
-              <option value="top-right">Top Right</option>
-              <option value="bottom">Bottom</option>
-              <option value="bottom-right">Bottom Right</option>
-              <option value="bottom-left">Bottom Left</option>
-            </select>
-            <button onClick={() => triggerMatchEvent('referee-call', { text: 'Fault', team: matchDetails.teams.teamA })}>
-              Fault
-            </button>
-            <button onClick={() => triggerMatchEvent('timeout', { text: 'Timeout', team: matchDetails.teams.teamA })}>
-              Timeout
-            </button>
-            <button onClick={() => triggerMatchEvent('substitution', { text: 'Subsitution', team: matchDetails.teams.teamA })}>
-              Player Substitution
-            </button>
-            <button onClick={() => handleToggleComponent('matchup')}>
-              Toggle Matchup ({config.matchup.enabled.toString()})
-            </button>
-            <button onClick={() => handleToggleComponent('lowerThird')}>
-              Toggle LowerThird ({config.lowerThird.enabled.toString()})
-            </button>
-            <button onClick={() => handleToggleComponent('socialMedia')}>
-              Toggle SocialMedia ({config.socialMedia.enabled.toString()})
-            </button>
-            <select id="socialmedia-position-select" value={config.socialMedia.position} onChange={(e) => handleSelectChange('socialMedia', 'position', e.target.value)}>
-              <option value="top">Top</option>
-              <option value="top-left">Top Left</option>
-              <option value="top-right">Top Right</option>
-              <option value="bottom">Bottom</option>
-              <option value="bottom-right">Bottom Right</option>
-              <option value="bottom-left">Bottom Left</option>
-            </select>
-            <button onClick={() => handleToggleComponent('teamComparison')}>
-              Toggle TeamComparison ({config.teamComparison.enabled.toString()})
-            </button>
-            <button onClick={() => handleToggleComponent('afterMatch')}>
-              Toggle AfterMatch ({config.afterMatch.enabled.toString()})
-            </button>
-            <button onClick={() => handleToggleComponent('sponsors')}>
-              Toggle SponsorsPanel ({config.sponsors.enabled.toString()})
-            </button>
-          </div>
-        )}
-      </ScalableCanvas>
-    </OverlayProvider>
+      </OverlayProvider>
+    </>
   );
 }
 
